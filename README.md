@@ -1,1 +1,563 @@
+[chikso_webtoon.html](https://github.com/user-attachments/files/27311734/chikso_webtoon.html)
 ㅇㅇㅇㅇㅇㅇ
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>칙소의 거짓말 공장 🐱</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Comic+Bold&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0e0520;
+      font-family: 'Noto Sans KR', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* 배경 파티클 */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(120,0,200,0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(60,0,150,0.2)  0%, transparent 50%),
+        #0e0520;
+    }
+
+    /* ── 타이틀 헤더 ── */
+    .webtoon-header {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding: 48px 20px 32px;
+    }
+    .header-ep {
+      font-size: 0.8rem; letter-spacing: 4px;
+      color: rgba(200,150,255,0.6); margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .header-title {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(2.4rem, 8vw, 5rem);
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 0%, #e0b0ff 40%, #b060ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(180,80,255,0.6));
+      margin-bottom: 8px;
+    }
+    .header-sub {
+      font-size: 0.95rem; color: rgba(255,255,255,0.45); margin-top: 6px;
+    }
+    .header-line {
+      width: 80px; height: 3px; margin: 20px auto 0;
+      background: linear-gradient(90deg, transparent, #b060ff, transparent);
+      border-radius: 2px;
+    }
+
+    /* ── 웹툰 래퍼 ── */
+    .webtoon {
+      position: relative; z-index: 2;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 16px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── 패널 공통 ── */
+    .panel {
+      position: relative;
+      background: #1a0a30;
+      border: 3px solid #4a1a80;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .panel:hover { border-color: #9040ff; }
+
+    /* 패널 번호 */
+    .panel-num {
+      position: absolute; top: 10px; left: 10px; z-index: 20;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #9040ff; color: #fff;
+      font-size: 0.8rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 12px rgba(144,64,255,0.6);
+    }
+
+    /* 패널 내부 배경 효과 */
+    .panel-inner {
+      min-height: 280px;
+      display: flex; align-items: center;
+      justify-content: space-around;
+      padding: 24px 20px;
+      gap: 16px;
+      position: relative;
+    }
+
+    /* 캐릭터 */
+    .char {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; flex-shrink: 0;
+    }
+    .char-face {
+      font-size: 4rem; line-height: 1;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+      transition: transform 0.2s;
+    }
+    .char:hover .char-face { transform: scale(1.08); }
+    .char-name {
+      font-size: 0.68rem; font-weight: 700;
+      color: rgba(255,255,255,0.5); letter-spacing: 1px;
+    }
+
+    /* 말풍선 */
+    .bubble-wrap {
+      flex: 1; display: flex; flex-direction: column; gap: 10px;
+    }
+    .bubble {
+      position: relative;
+      background: #fff;
+      color: #1a1a1a;
+      border-radius: 18px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      max-width: 100%;
+      word-break: keep-all;
+    }
+    .bubble.bubble-left::before {
+      content: '';
+      position: absolute; left: -12px; top: 50%; transform: translateY(-50%);
+      border: 8px solid transparent;
+      border-right-color: #fff;
+      border-left: 0;
+    }
+    .bubble.bubble-right::after {
+      content: '';
+      position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
+      border: 8px solid transparent;
+      border-left-color: #fff;
+      border-right: 0;
+    }
+    .bubble.bubble-purple {
+      background: linear-gradient(135deg, #7b2ff7, #a855f7);
+      color: #fff;
+    }
+    .bubble.bubble-purple.bubble-left::before { border-right-color: #7b2ff7; }
+    .bubble.bubble-yellow {
+      background: linear-gradient(135deg, #FFD600, #FFAB00);
+      color: #1a1a1a;
+    }
+    .bubble.bubble-yellow.bubble-right::after { border-left-color: #FFD600; }
+    .bubble.bubble-red {
+      background: linear-gradient(135deg, #e53935, #ff5252);
+      color: #fff;
+    }
+    .bubble.bubble-red.bubble-left::before { border-right-color: #e53935; }
+    .bubble em {
+      font-style: normal; color: #e53935; font-size: 1.05em;
+    }
+    .bubble.bubble-purple em,
+    .bubble.bubble-red em { color: #FFD600; }
+
+    /* 효과음 */
+    .sfx {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.8rem; font-weight: 900;
+      color: #FFD600;
+      filter: drop-shadow(0 0 8px rgba(255,200,0,0.7));
+      text-align: center;
+      animation: sfxPop 0.4s ease-out;
+      line-height: 1;
+    }
+    @keyframes sfxPop {
+      from { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    /* 배지 */
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #FFD600, #FF6D00);
+      color: #1a1a1a; font-size: 0.75rem; font-weight: 900;
+      padding: 4px 12px; border-radius: 20px;
+      letter-spacing: 1px;
+    }
+
+    /* 패널별 배경 */
+    .panel-1 .panel-inner {
+      background: linear-gradient(135deg, #1a0a30 0%, #2d1060 100%);
+    }
+    .panel-2 .panel-inner {
+      background: linear-gradient(135deg, #0a1a30 0%, #1040a0 60%, #0a1a30 100%);
+    }
+    .panel-3 .panel-inner {
+      background: linear-gradient(135deg, #200a10 0%, #500a20 60%, #200a10 100%);
+    }
+    .panel-4 .panel-inner {
+      background: linear-gradient(135deg, #0a1a20 0%, #0a3050 60%, #0a1a20 100%);
+    }
+    .panel-5 .panel-inner {
+      background: linear-gradient(135deg, #1a1000 0%, #3a2000 60%, #1a1000 100%);
+    }
+    .panel-6 .panel-inner {
+      background: linear-gradient(135deg, #1a0000 0%, #4a0000 50%, #1a0000 100%);
+    }
+    .panel-7 .panel-inner {
+      background: linear-gradient(135deg, #0a2010 0%, #1a4020 50%, #0a2010 100%);
+    }
+
+    /* 타이틀 패널 */
+    .panel-title {
+      background: linear-gradient(180deg, #1a0a30, #0e0520);
+      border-color: #6020b0;
+      margin-bottom: 12px;
+    }
+    .panel-title .panel-inner {
+      min-height: 200px;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      text-align: center;
+      background: none;
+    }
+    .title-chars {
+      display: flex; justify-content: center; gap: 40px; margin-bottom: 8px;
+    }
+    .title-char-face { font-size: 5rem; }
+    .title-desc {
+      font-size: 0.85rem; color: rgba(255,255,255,0.5);
+      line-height: 1.7; text-align: center;
+    }
+    .title-desc strong { color: #b060ff; }
+
+    /* 결말 패널 */
+    .panel-end {
+      background: linear-gradient(135deg, #0e0520, #1a0a30);
+      border-color: #9040ff;
+      margin-top: 12px;
+    }
+    .panel-end .panel-inner {
+      min-height: 160px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      background: none;
+    }
+    .end-text {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.2rem; color: #fff;
+      text-align: center; line-height: 1.7;
+    }
+    .end-text strong { color: #FFD600; }
+    .end-emoji { font-size: 3rem; }
+
+    /* 감정 효과 오버레이 */
+    .shock-lines {
+      position: absolute; inset: 0; pointer-events: none;
+      background: repeating-conic-gradient(
+        rgba(255,220,0,0.04) 0deg 10deg,
+        transparent 10deg 20deg
+      );
+    }
+    .cry-drops {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 1.4rem; opacity: 0.6;
+      animation: drip 1.5s ease-in-out infinite;
+    }
+    @keyframes drip {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+    .lie-words {
+      position: absolute; right: 12px; top: 0; bottom: 0;
+      display: flex; flex-direction: column;
+      justify-content: space-around; pointer-events: none;
+    }
+    .lie-word {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 0.9rem; color: rgba(255,50,50,0.35);
+      letter-spacing: 1px;
+    }
+
+    /* 말풍선 컨테이너 레이아웃 */
+    .layout-row       { display: flex; align-items: center; gap: 16px; width: 100%; }
+    .layout-center    { flex-direction: column; align-items: center; text-align: center; }
+    .layout-col       { display: flex; flex-direction: column; gap: 12px; }
+
+    /* 구분선 */
+    .panel-divider {
+      height: 6px;
+      background: linear-gradient(90deg, transparent, #4a1a80, #9040ff, #4a1a80, transparent);
+      margin: 8px 0;
+      border-radius: 3px;
+    }
+
+    /* 반응형 */
+    @media (max-width: 500px) {
+      .char-face { font-size: 2.8rem; }
+      .bubble { font-size: 0.82rem; padding: 10px 12px; }
+      .panel-inner { padding: 16px 12px; min-height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<!-- 헤더 -->
+<div class="webtoon-header">
+  <div class="header-ep">Episode 1 · 웹툰</div>
+  <div class="header-title">칙소의 거짓말 공장</div>
+  <div class="header-sub">거짓말인 듯, 거짓말 아닌, 거짓말 같은 🐱</div>
+  <div class="header-line"></div>
+</div>
+
+<div class="webtoon">
+
+  <!-- 타이틀 패널 -->
+  <div class="panel panel-title">
+    <div class="panel-inner">
+      <div class="title-chars">
+        <div class="char">
+          <span class="title-char-face">👩</span>
+          <span class="char-name">나 (친구)</span>
+        </div>
+        <div class="char">
+          <span class="title-char-face">🧔</span>
+          <span class="char-name">칙소</span>
+        </div>
+      </div>
+      <div class="title-desc">
+        칙소는 좀 이상하지만…<br>
+        <strong>착한 사람이에요?</strong><br>
+        <span style="font-size:0.75rem; color:rgba(255,255,255,0.3)">…아마도</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <!-- 패널 1 -->
+  <div class="panel panel-1">
+    <div class="panel-num">1</div>
+    <div class="panel-inner">
+      <div class="layout-row">
+        <div class="char">
+          <span class="char-face">👩</span>
+          <span class="char-name">나</span>
+        </div>
+        <div class="bubble-wrap">
+          <div class="bubble bubble-left" style="align-self:flex-start">
+            자전거 판다니니<br>잘 팔렸어?
+          </div>
+        </div>
+        <div class="char">
+          <span class="char-face">🧔</span>
+          <span class="char-name">칙소</span>
+        </div>
+        <div class="bubble-wrap">
+          <div class="badge">BEST 상품!!</div>
+          <div class="bubble bubble-yellow bubble-right" style="align-self:flex-end">
+            완전 잘 팔렸지!!<br><em>인기 폭발이야!!</em> 🔥
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 패널 2 -->
+  <div class="panel panel-2">
+    <div class="panel-num">2</div>
+    <div class="panel-inner">
+      <div class="layout-row">
+        <div class="char">
+          <span class="char-face">👩</span>
+          <span class="char-name">나</span>
+        </div>
+        <div class="bubble-wrap">
+          <div class="bubble bubble-left">
+            근데 저기…<br>
+            저 자전거는 뭐야? 🚲
+          </div>
+        </div>
+        <div class="char">
+          <span class="char-face">😅</span>
+          <span class="char-name">칙소</span>
+        </div>
+        <div class="bubble-wrap layout-col">
+          <div class="bubble bubble-purple bubble-right">
+            아… 그건…<br><em>전시용이야!!</em>
+          </div>
+          <div style="text-align:right; font-size:0.75rem; color:rgba(255,100,100,0.7); font-weight:700;">
+            안 팔림 ㅜㅜ
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 패널 3 -->
+  <div class="panel panel-3">
+    <div class="panel-num">3</div>
+    <div class="panel-inner">
+      <div class="layout-row">
+        <div class="char">
+          <span class="char-face">🧔</span>
+          <span class="char-name">칙소</span>
+        </div>
+        <div class="bubble-wrap layout-col">
+          <div class="bubble bubble-left" style="background:rgba(255,255,255,0.12); color:rgba(255,255,255,0.7); border:1px solid rgba(255,255,255,0.2);">
+            어제 장례식장 갔다고…
+          </div>
+          <div class="bubble bubble-left" style="align-self:flex-start;">
+            응… 너무 슬펐어 😢
+          </div>
+        </div>
+        <div class="char">
+          <span class="char-face">😶</span>
+          <span class="char-name">나</span>
+        </div>
+      </div>
+      <div class="cry-drops">💧💧</div>
+    </div>
+  </div>
+
+  <!-- 패널 4 -->
+  <div class="panel panel-4">
+    <div class="panel-num">4</div>
+    <div class="panel-inner">
+      <div class="shock-lines"></div>
+      <div class="layout-row">
+        <div class="char">
+          <span class="char-face">😐</span>
+          <span class="char-name">나</span>
+        </div>
+        <div class="bubble-wrap">
+          <div class="bubble bubble-left">
+            근데 그 친구…<br>
+            <em>살아있는데?</em> 😶
+          </div>
+        </div>
+        <div class="char">
+          <span class="char-face">😱</span>
+          <span class="char-name">칙소</span>
+        </div>
+        <div class="bubble-wrap">
+          <div class="sfx">?!!</div>
+          <div class="bubble bubble-red bubble-right">
+            아–<br>나 살아있다!!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 패널 5 -->
+  <div class="panel panel-5">
+    <div class="panel-num">5</div>
+    <div class="panel-inner">
+      <div class="layout-row">
+        <div class="char">
+          <span class="char-face">😤</span>
+          <span class="char-name">나</span>
+        </div>
+        <div class="bubble-wrap">
+          <div class="bubble bubble-left">
+            도대체 왜 그렇게<br>
+            <em>거짓말을 해?</em>
+          </div>
+        </div>
+        <div class="char">
+          <span class="char-face">😵</span>
+          <span class="char-name">칙소</span>
+        </div>
+      </div>
+      <div class="lie-words">
+        <span class="lie-word">거짓말</span>
+        <span class="lie-word">거짓말</span>
+        <span class="lie-word">거짓말</span>
+        <span class="lie-word">거짓말</span>
+        <span class="lie-word">거짓말</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 패널 6 -->
+  <div class="panel panel-6">
+    <div class="panel-num">6</div>
+    <div class="panel-inner">
+      <div class="layout-row" style="align-items:flex-end;">
+        <div class="char">
+          <span class="char-face">😠</span>
+          <span class="char-name">나</span>
+        </div>
+        <div class="bubble-wrap">
+          <div class="bubble bubble-left">
+            그럼 이제부터<br>
+            <em>솔직하게 말해.</em>
+          </div>
+        </div>
+        <div class="char">
+          <span class="char-face">🙂</span>
+          <span class="char-name">칙소</span>
+        </div>
+        <div class="bubble-wrap">
+          <div class="bubble bubble-purple bubble-right">
+            …사실 나<br>
+            <em>거짓말은 안 했어.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 패널 7 – 둘 다 침묵 -->
+  <div class="panel panel-7">
+    <div class="panel-num">7</div>
+    <div class="panel-inner layout-center" style="flex-direction:column; gap:18px;">
+      <div style="display:flex; gap:40px; font-size:3.5rem;">
+        <span>😑</span>
+        <span>😇</span>
+      </div>
+      <div class="sfx" style="font-size:2.2rem; color:#b060ff;">
+        …………
+      </div>
+      <div class="bubble" style="text-align:center; max-width:320px;">
+        (침묵)
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <!-- 결말 패널 -->
+  <div class="panel panel-end">
+    <div class="panel-inner">
+      <div class="end-emoji">🐱</div>
+      <div class="end-text">
+        결론: <strong>칙소의 거짓말</strong>은<br>
+        오늘도 계속된다…
+      </div>
+      <div style="font-size:0.78rem; color:rgba(255,255,255,0.3); text-align:center; margin-top:4px;">
+        다음 화에 계속 →
+      </div>
+    </div>
+  </div>
+
+</div><!-- /webtoon -->
+
+<!-- 푸터 -->
+<div style="text-align:center; padding:32px; color:rgba(255,255,255,0.2); font-size:0.75rem; position:relative; z-index:2;">
+  칙소의 거짓말 공장 · Episode 1 · 🐱
+</div>
+
+</body>
+</html>
